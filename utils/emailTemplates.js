@@ -1,4 +1,4 @@
-const createEmailTemplate = (name, verificationEndpoint) => {
+export const verifyEmailTemplate = (name, verificationEndpoint) => {
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +44,7 @@ const createEmailTemplate = (name, verificationEndpoint) => {
             display: inline-block;
             padding: 10px 20px;
             font-size: 16px;
-            color: #ffffff;
+            color: #ffffff !important;
             background-color: #007bff;
             text-decoration: none;
             border-radius: 4px;
@@ -76,6 +76,64 @@ const createEmailTemplate = (name, verificationEndpoint) => {
             <p>&copy; 2024 Your Company. All rights reserved.</p>
         </div>
     </div>
+</body>
+</html>
+`;
+};
+
+export const verificationCodeEmail = (code) => {
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: inline-block;
+    max-width: 400px;
+  }
+  .code {
+    font-size: 24px;
+    color: #007BFF;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px dashed #007BFF;
+    display: inline-block;
+  }
+  .footer {
+    font-size: 12px;
+    color: #666;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .footer a {
+    color: #007BFF;
+    text-decoration: none;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Your Code:</h1>
+  <div class="code">${code}</div>
+  <div class="footer">
+    <p>Need help? <a href="mailto:${process.env.SENDER_EMAIL}">Contact us</a></p>
+    <p>Follow us on <a href="https://twitter.com/example">Twitter</a> | <a href="https://facebook.com/example">Facebook</a></p>
+  </div>
+</div>
 </body>
 </html>
 `;

@@ -30,7 +30,7 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    confirmationCode: {
+    verificationCode: {
       type: String,
       default: null,
     },
@@ -38,6 +38,9 @@ const userSchema = new Schema(
       type: String,
       default: "Active",
       enum: ["Active", "Inactive"],
+    },
+    changePasswordTime: {
+      type: Date,
     },
     role: {
       type: String,
@@ -50,5 +53,5 @@ const userSchema = new Schema(
   },
 );
 
-const userModel = mongoose.models.user || model("user", userSchema);
+const userModel = mongoose.models.User || model("user", userSchema);
 export default userModel;
