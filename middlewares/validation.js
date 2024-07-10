@@ -1,24 +1,25 @@
-import joi from "joi";
+import Joi from "joi";
 
 export const generalFields = {
-  email: joi.string().email().messages({
+  email: Joi.string().email().messages({
     "string.empty": "email is required",
     "string.email": "plz enter a valid email",
   }),
-  password: joi.string().min(4).max(50).messages({
+  password: Joi.string().min(4).max(50).messages({
     "string.empty": "password is required",
   }),
-  file: joi.object({
-    size: joi.number().max(50000000).required(),
-    path: joi.string().required(),
-    filename: joi.string().required(),
-    destination: joi.string().required(),
-    mimetype: joi.string().required(),
-    encoding: joi.string().required(),
-    originalname: joi.string().required(),
-    fieldname: joi.string().required(),
-    dest: joi.string(),
+  file: Joi.object({
+    size: Joi.number().max(50000000).required(),
+    path: Joi.string().required(),
+    filename: Joi.string().required(),
+    destination: Joi.string().required(),
+    mimetype: Joi.string().required(),
+    encoding: Joi.string().required(),
+    originalname: Joi.string().required(),
+    fieldname: Joi.string().required(),
+    dest: Joi.string(),
   }),
+  id: Joi.string().hex().length(24),
 };
 
 export const validator = (schema) => {

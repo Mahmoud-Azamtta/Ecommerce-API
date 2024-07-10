@@ -33,7 +33,7 @@ export const register = async (req, res, next) => {
 
   if (!newUser) {
     return next(
-      new AppError("An error occured while creating new user's profiel", 400),
+      new AppError("An error occured while creating new user's account", 400),
     );
   }
 
@@ -134,4 +134,39 @@ export const resetPassword = async (req, res, next) => {
   user.changePasswordTime = Date.now();
   await user.save();
   return res.status(200).json({ message: "success" });
+};
+
+// NOTE: This is a dummy endpoint to help me add admins to the application
+export const addAdmin = async (req, res, next) => {
+  try {
+    const { username, email, password } = req.body;
+    const user = await userModel.findOne({ email });
+
+    if (user) {
+      console.log(user);
+      return next(
+        new AppError("This email is already connected to an account", 409),
+      );
+    }
+
+    const hashed = await bcrypt.hash(password, Number(process.env.SALT_ROUND));
+
+    const newUser = await userModel.create({
+      username,
+      email,
+      password: hashed,
+      role: "Admin",
+      isEmailConfirmed: true,
+    });
+
+    if (!newUser) {
+      return next(
+        new AppError("An error occured while creating admin's account", 400),
+      );
+    }
+
+    return res.status(201).json({ message: "success" });
+  } catch {
+    return next(new AppError("unknown error", 404));
+  }
 };

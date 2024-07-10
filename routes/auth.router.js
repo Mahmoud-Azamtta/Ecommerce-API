@@ -33,4 +33,6 @@ router.patch(
   tryCatch(authController.resetPassword),
 );
 
+router.post("/add-admin", authController.addAdmin);
+
 export default router;

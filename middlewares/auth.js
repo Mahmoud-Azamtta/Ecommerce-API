@@ -13,16 +13,21 @@ export const auth = (accessRoles = []) => {
 
     if (!authorization?.startsWith(process.env.BEARER)) {
       return next(
-        new AppError(`Unauthorized, invlaid authorization token`, 401),
+        new AppError("Unauthorized, invlaid authorization token", 401),
       );
     }
 
     const token = authorization.split(process.env.BEARER)[1];
-    const decoded = jwt.verify(token, process.env.LOGIN_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.LOGIN_SECRET);
+    } catch (error) {
+      return next(new AppError("Token has expired, login again", 400));
+    }
 
     if (!decoded) {
       return next(
-        new AppError(`Unauthorized, invalid authorization token`, 401),
+        new AppError("Unauthorized, invalid authorization token", 401),
       );
     }
 
@@ -31,13 +36,15 @@ export const auth = (accessRoles = []) => {
       .select("username role changePasswordTime");
 
     if (!user) {
-      return next(new AppError(`User not found`, 400));
+      return next(new AppError("User not found", 400));
     }
-    if (parseInt(user.changePasswordTime?.getTime() / 1000) > decoded.iat) {
-      return next(new AppError(`Token has expired, login again`, 400));
+
+    if (Number(user.changePasswordTime?.getTime() / 1000) > decoded.iat) {
+      return next(new AppError("Token has expired, login again", 400));
     }
+
     if (!accessRoles.includes(user.role)) {
-      return next(new AppError(`Unauthorized`, 401));
+      return next(new AppError("Unauthorized", 401));
     }
 
     req.user = user;
