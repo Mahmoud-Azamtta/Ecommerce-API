@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 9090;
 
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(CORS(corsOptions));
+app.use(CORS());
 
 databaseConnection();
 
